@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <!-- First chat app page -->
+  <div class="uperdiv">
+
+    <h1>Chat App!!!</h1>
+    <ul id="messages"></ul>
+    <form action="">
+        <input type="text" id="input" placeholder="Enter a msg">
+        <input type="submit" id="btn">
+    </form>
+
+  </div>
+
+<!-- Second page of username -->
+<div id="show" style="display: none;">
+    <h1>Enter user name</h1>
+    <h2>Active user:</h2>
+    <form id="fomii" action="">
+        <input type="text" placeholder="Enter username">
+        <input type="submit" value="Join now">
+    </form>
+</div>
+
+
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+
+//=========================Second page of Enter username==================================
+
+let btn = document.querySelector('#btn')
+let user = document.querySelector('input')
+let up = document.querySelector('.uperdiv')
+let show = document.querySelector('#show')
+let fomii = document.querySelector('#fomii')
+
+btn.addEventListener('click',()=>{
+let username = user.value
+if (username) {
+  socket.emit('join', username);   //--------socket.emit mtlb data bhejna backend me
+  up.style.display='none'
+  show.style.display='block'
+}
+})
+
+
+//========================First Chat App page============================================
+  const socket = io();
+
+  const form = document.getElementById('form');
+  const input = document.getElementById('input');
+  const messages = document.getElementById('messages');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (input.value) {
+      socket.emit('chat message', input.value);
+      input.value = '';
+    }
+  });
+
+  socket.on('chat message', (msg) => {
+    const item = document.createElement('li');
+    item.innerText = msg;
+    messages.appendChild(item);
+    window.scrollTo(0, document.body.scrollHeight);
+  });
+
+</script>
+
+
+
+</body>
+</html>
